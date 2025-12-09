@@ -1,14 +1,14 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:good_hamburger/infra/products_repository.dart';
+import 'package:good_hamburger/models/product_model.dart';
 import 'package:good_hamburger/models/enums/product_category_enum.dart';
-import 'package:good_hamburger/models/product.dart';
+import 'package:good_hamburger/models/entities/product.dart';
 
 void main() {
-  late ProductsRepository productRepository;
+  late ProductModel productRepository;
 
   group('Product', () {
     setUp(() async {
-      productRepository = ProductsRepository();
+      productRepository = ProductModel();
       await productRepository.getProducts();
     });
     test('If product inicialize correctly', () async {

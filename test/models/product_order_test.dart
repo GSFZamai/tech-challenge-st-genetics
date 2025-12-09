@@ -1,21 +1,20 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:good_hamburger/infra/products_repository.dart';
-import 'package:good_hamburger/models/product.dart';
-import 'package:good_hamburger/models/product_order.dart';
+import 'package:good_hamburger/models/product_model.dart';
+import 'package:good_hamburger/models/entities/product.dart';
+import 'package:good_hamburger/models/product_order_model.dart';
 
 void main() {
-  late ProductOrder order;
-  late ProductsRepository productRepository;
+  late ProductOrderModel order;
+  late ProductModel productRepository;
   setUp(() async {
-    order = ProductOrder();
-    productRepository = ProductsRepository();
+    order = ProductOrderModel();
+    productRepository = ProductModel();
     await productRepository.getProducts();
   });
 
   group("ProductOrder", () {
     test("if order instantiates correctly", () {
-      expect(order, isInstanceOf<ProductOrder>());
+      expect(order, isInstanceOf<ProductOrderModel>());
       expect(order.id, 1);
     });
 

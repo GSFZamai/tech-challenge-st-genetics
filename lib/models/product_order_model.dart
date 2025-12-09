@@ -1,14 +1,14 @@
 import 'package:good_hamburger/models/enums/product_category_enum.dart';
-import 'package:good_hamburger/models/product.dart';
+import 'package:good_hamburger/models/entities/product.dart';
 
-class ProductOrder {
+class ProductOrderModel {
   static int lastId = 0;
   late int id;
   late List<Product> productList = [];
 
-  ProductOrder() {
-    id = ++ProductOrder.lastId;
-    ProductOrder.lastId = id;
+  ProductOrderModel() {
+    id = ++ProductOrderModel.lastId;
+    ProductOrderModel.lastId = id;
   }
 
   void addProduct(Product product) {
