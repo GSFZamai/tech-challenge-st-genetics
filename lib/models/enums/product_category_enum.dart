@@ -1,0 +1,1 @@
+enum ProductCategoryEnum { sandwich, extras }
