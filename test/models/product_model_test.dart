@@ -17,7 +17,6 @@ void main() {
     group("getProducts", () {
       test('if getProducts method gets products from products.json', () async {
         final List<Product> productsList = await productModel.getProducts();
-
         expect(productsList, hasLength(5));
       });
     });

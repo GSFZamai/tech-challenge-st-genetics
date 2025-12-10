@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import 'package:flutter/services.dart';
 import 'package:good_hamburger/models/entities/product.dart';
 
 class ProductModel {
@@ -7,8 +7,9 @@ class ProductModel {
 
   Future<List<Product>> getProducts() async {
     try {
-      final file = File('assets/data/products.json');
-      final jsonString = await file.readAsString();
+      final jsonString = await rootBundle.loadString(
+        'assets/data/products.json',
+      );
       final List<dynamic> jsonList = jsonDecode(jsonString);
       return jsonList.map((product) => Product.fromJson(product)).toList();
     } catch (e) {

@@ -13,8 +13,9 @@ class ProductOrderModel {
 
   void addProduct(Product product) {
     if (_hasProductOnList(product.id)) return;
-    if (product.category == ProductCategoryEnum.sandwich && _hasSandwich())
+    if (product.category == ProductCategoryEnum.sandwich && _hasSandwich()) {
       return;
+    }
 
     productList.add(product);
   }
