@@ -1,4 +1,4 @@
-package com.example.good_hamburger
+package br.com.goodburger
 
 import io.flutter.embedding.android.FlutterActivity
 
