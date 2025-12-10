@@ -15,7 +15,9 @@ void main() {
     });
 
     group("getProducts", () {
-      test('if getProducts method gets products from products.json', () async {
+      testWidgets('if getProducts method gets products from products.json', (
+        tester,
+      ) async {
         final List<Product> productsList = await productModel.getProducts();
         expect(productsList, hasLength(5));
       });
@@ -25,7 +27,7 @@ void main() {
       setUp(() async {
         await productModel.getProducts();
       });
-      test('if getProductById return a Product', () async {
+      testWidgets('if getProductById return a Product', (tester) async {
         final burger = await productModel.getProductById(1);
         expect(burger, isInstanceOf<Product>());
         expect(burger.id, 1);

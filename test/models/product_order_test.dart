@@ -2,19 +2,20 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:good_hamburger/models/product_model.dart';
 import 'package:good_hamburger/models/entities/product.dart';
 import 'package:good_hamburger/models/product_order_model.dart';
+import 'package:good_hamburger/models/shared/custom_exception.dart';
 
 void main() {
-  late ProductOrderModel order;
+  late OrderModel order;
   late ProductModel productRepository;
   setUp(() async {
-    order = ProductOrderModel();
+    order = OrderModel();
     productRepository = ProductModel();
     await productRepository.getProducts();
   });
 
   group("ProductOrder", () {
     test("if order instantiates correctly", () {
-      expect(order, isInstanceOf<ProductOrderModel>());
+      expect(order, isInstanceOf<OrderModel>());
       expect(order.id, 1);
     });
 
@@ -31,27 +32,45 @@ void main() {
         softDrink = await productRepository.getProductById(5);
       });
 
-      test("add one Product", () {
+      testWidgets("add one Product", (tester) async {
         order.addProduct(burger);
         expect(order.productList, hasLength(1));
         expect(order.productList, containsOnce(burger));
       });
 
-      test("cannot add more than one sandwich product", () {
+      testWidgets("cannot add more than one sandwich product", (tester) async {
         order.addProduct(burger);
-        order.addProduct(egg);
+        expect(
+          () => order.addProduct(burger),
+          throwsA(
+            isA<CustomException>().having(
+              (e) => e.message,
+              'message',
+              'Only one sandwich can be added on order.',
+            ),
+          ),
+        );
         expect(order.productList, hasLength(1));
         expect(order.productList, containsOnce(burger));
       });
 
-      test("cannot add the same product", () {
+      testWidgets("cannot add the same product", (testes) async {
         order.addProduct(fries);
-        order.addProduct(fries);
+        expect(
+          () => order.addProduct(fries),
+          throwsA(
+            isA<CustomException>().having(
+              (e) => e.message,
+              'message',
+              'Product already on order.',
+            ),
+          ),
+        );
         expect(order.productList, hasLength(1));
         expect(order.productList, containsOnce(fries));
       });
 
-      test("can add more than one extra", () {
+      testWidgets("can add more than one extra", (tester) async {
         order.addProduct(fries);
         order.addProduct(softDrink);
         expect(order.productList, hasLength(2));
@@ -66,7 +85,7 @@ void main() {
         burger = await productRepository.getProductById(1);
         fries = await productRepository.getProductById(4);
       });
-      test('remove the right product', () async {
+      testWidgets('remove the right product', (tester) async {
         order.addProduct(burger);
         expect(order.productList, hasLength(1));
         order.addProduct(fries);
@@ -92,7 +111,7 @@ void main() {
         order.addProduct(fries);
         order.addProduct(softDrink);
       });
-      test('cleanList', () {
+      testWidgets('cleanList', (tester) async {
         expect(order.productList, hasLength(3));
         expect(
           order.productList,
@@ -114,9 +133,9 @@ void main() {
         softDrink = await productRepository.getProductById(5);
       });
 
-      test(
+      testWidgets(
         "If the customer selects a sandwich, fries, and a soft drink, they will receive a 20% discount",
-        () {
+        (testes) async {
           order.addProduct(burger);
           order.addProduct(fries);
           order.addProduct(softDrink);
@@ -129,9 +148,9 @@ void main() {
           expect(order.calculateDiscount(), 0.2);
         },
       );
-      test(
+      testWidgets(
         "If the customer selects a sandwich and a soft drink, they will receive a 15% discount;",
-        () {
+        (tester) async {
           order.addProduct(burger);
           order.addProduct(softDrink);
 
@@ -140,9 +159,9 @@ void main() {
           expect(order.calculateDiscount(), 0.15);
         },
       );
-      test(
+      testWidgets(
         "If the customer selects a sandwich and fries, they will receive a 10% discount",
-        () {
+        (tester) async {
           order.addProduct(burger);
           order.addProduct(fries);
 
@@ -151,7 +170,9 @@ void main() {
           expect(order.calculateDiscount(), 0.1);
         },
       );
-      test("If the customer only a sandwich there is no discount", () {
+      testWidgets("If the customer only a sandwich there is no discount", (
+        tester,
+      ) async {
         order.addProduct(burger);
 
         expect(order.productList, hasLength(1));

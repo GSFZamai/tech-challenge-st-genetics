@@ -9,10 +9,12 @@ class ProductModel {
     try {
       final jsonString = await rootBundle.loadString(
         'assets/data/products.json',
+        cache: false,
       );
       final List<dynamic> jsonList = jsonDecode(jsonString);
       return jsonList.map((product) => Product.fromJson(product)).toList();
     } catch (e) {
+      print(e);
       return [];
     }
   }

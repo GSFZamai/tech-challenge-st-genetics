@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:good_hamburger/models/entities/product.dart';
-import 'package:good_hamburger/view_models/product_order_view_model.dart';
+import 'package:good_hamburger/models/enums/product_category_enum.dart';
+import 'package:good_hamburger/models/shared/custom_exception.dart';
+import 'package:good_hamburger/view_models/order_view_model.dart';
 import 'package:good_hamburger/view_models/product_view_model.dart';
 import 'package:good_hamburger/views/widgets/order_widget.dart';
 import 'package:good_hamburger/views/widgets/product_widget.dart';
@@ -14,7 +16,19 @@ class ProductListScreen extends StatefulWidget {
 
 class _ProductListScreen extends State<ProductListScreen> {
   ProductViewModel productViewModel = ProductViewModel();
-  ProductOrderViewModel productOrderViewModel = ProductOrderViewModel();
+  OrderViewModel orderViewModel = OrderViewModel();
+  ProductCategoryEnum? productCategory;
+  void handlePressProductCard(Product product) {
+    try {
+      orderViewModel.addProduct(product);
+    } catch (e) {
+      if (e is CustomException) {
+        ScaffoldMessenger.maybeOf(
+          context,
+        )?.showSnackBar(SnackBar(content: Text(e.message)));
+      }
+    }
+  }
 
   @override
   void initState() {
@@ -47,29 +61,55 @@ class _ProductListScreen extends State<ProductListScreen> {
       ),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsetsGeometry.all(8),
+          padding: EdgeInsetsGeometry.all(24),
+
           child: Column(
-            spacing: 20,
+            spacing: 16,
             children: [
+              SegmentedButton(
+                showSelectedIcon: false,
+                segments: [
+                  ButtonSegment(
+                    value: ProductCategoryEnum.sandwich,
+                    enabled: true,
+                    label: Text("Sandwich"),
+                  ),
+                  ButtonSegment(
+                    value: ProductCategoryEnum.extras,
+                    enabled: true,
+                    label: Text("Extras"),
+                  ),
+                  ButtonSegment(value: null, enabled: true, label: Text("All")),
+                ],
+                onSelectionChanged: (newSelection) {
+                  productViewModel.filterProductsByCategory(newSelection.first);
+                  setState(() {
+                    productCategory = newSelection.first;
+                  });
+                },
+                selected: {productCategory},
+                emptySelectionAllowed: true,
+              ),
+
               ListenableBuilder(
                 listenable: productViewModel,
                 builder: (context, child) {
                   final productList = productViewModel.productList;
                   if (productList.isEmpty) {
-                    return Text("Lista vazia...");
+                    return Text("Fetching data...");
                   }
                   return ListenableBuilder(
-                    listenable: productOrderViewModel,
+                    listenable: orderViewModel,
                     builder: (context, child) {
                       return Column(
                         children: productList
                             .map(
                               (product) => ProductWidget(
                                 onPressed: () =>
-                                    productOrderViewModel.addProduct(product),
-                                onLongPress: () => productOrderViewModel
-                                    .removeProduct(product.id),
-                                isSelected: productOrderViewModel.isSelected(
+                                    handlePressProductCard(product),
+                                onLongPress: () =>
+                                    orderViewModel.removeProduct(product.id),
+                                isSelected: orderViewModel.isSelected(
                                   product.id,
                                 ),
                                 product: Product(
@@ -86,14 +126,18 @@ class _ProductListScreen extends State<ProductListScreen> {
                   );
                 },
               ),
-              ListenableBuilder(
-                listenable: productOrderViewModel,
-                builder: (context, child) {
-                  final orderProductList =
-                      productOrderViewModel.productOrderModel.productList;
-                  if (orderProductList.isEmpty) return Placeholder();
-                  return OrderWidget(items: orderProductList.length);
-                },
+              Expanded(
+                child: Align(
+                  alignment: AlignmentGeometry.bottomCenter,
+                  child: ListenableBuilder(
+                    listenable: orderViewModel,
+                    builder: (context, child) {
+                      final orderProductList = orderViewModel.orderProductList;
+                      if (orderProductList.isEmpty) return Container();
+                      return OrderWidget(orderViewModel: orderViewModel);
+                    },
+                  ),
+                ),
               ),
             ],
           ),

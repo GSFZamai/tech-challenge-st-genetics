@@ -11,7 +11,7 @@ void main() {
       productRepository = ProductModel();
       await productRepository.getProducts();
     });
-    test('If product inicialize correctly', () async {
+    testWidgets('If product inicialize correctly', (tester) async {
       final burger = await productRepository.getProductById(1);
 
       expect(burger, isInstanceOf<Product>());

@@ -1,20 +1,23 @@
 import 'package:good_hamburger/models/enums/product_category_enum.dart';
 import 'package:good_hamburger/models/entities/product.dart';
+import 'package:good_hamburger/models/shared/custom_exception.dart';
 
-class ProductOrderModel {
+class OrderModel {
   static int lastId = 0;
   late int id;
   late List<Product> productList = [];
 
-  ProductOrderModel() {
-    id = ++ProductOrderModel.lastId;
-    ProductOrderModel.lastId = id;
+  OrderModel() {
+    id = ++OrderModel.lastId;
+    OrderModel.lastId = id;
   }
 
   void addProduct(Product product) {
-    if (_hasProductOnList(product.id)) return;
     if (product.category == ProductCategoryEnum.sandwich && _hasSandwich()) {
-      return;
+      throw CustomException("Only one sandwich can be added on order.");
+    }
+    if (_hasProductOnList(product.id)) {
+      throw CustomException("Product already on order.");
     }
 
     productList.add(product);
@@ -25,8 +28,10 @@ class ProductOrderModel {
   }
 
   void cleanList() {
-    productList = [];
+    productList.clear();
   }
+
+  void submitOrder() {}
 
   double calculateDiscount() {
     if (productList.isEmpty) return 0;
