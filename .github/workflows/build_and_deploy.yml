@@ -1,5 +1,7 @@
 name: 'Build and Deploy'
 on:
+  push:
+    branches: [main]
   workflow_run:
     workflows: [Tests]
     types: [completed]
@@ -57,4 +59,4 @@ jobs:
           path: ./android-app
 
       - name: Publish app
-        run: firebase appdistribution:distribute ./android-app/app-release.apk --app ${{ secrets.APP_ID }} --token ${{ secrets.FIREBASE_TOKEN }}
+        run: firebase appdistribution:distribute ./android-app/app-release.apk --app ${{ secrets.APP_ID }} --token ${{ secrets.FIREBASE_TOKEN }} --groups st-stakeholders

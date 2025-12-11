@@ -21,4 +21,8 @@ class Product {
         : ProductCategoryEnum.sandwich,
     price: json["price"] as double,
   );
+
+  Map<String, dynamic> toJson() {
+    return {"id": id, "name": name, "category": category.name, "price": price};
+  }
 }

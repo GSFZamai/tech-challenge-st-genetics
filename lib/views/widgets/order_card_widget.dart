@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:good_hamburger/models/entities/product.dart';
 
-class OrderListCard extends StatelessWidget {
+class OrderCardWidget extends StatelessWidget {
   final Product product;
 
-  const OrderListCard({super.key, required this.product});
+  const OrderCardWidget({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {

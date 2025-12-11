@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:good_hamburger/view_models/order_view_model.dart';
-import 'package:good_hamburger/views/widgets/order_list_card.dart';
+import 'package:good_hamburger/views/widgets/order_card_widget.dart';
 
 class OrderDetailsScreen extends StatelessWidget {
   final OrderViewModel orderViewModel;
   const OrderDetailsScreen({super.key, required this.orderViewModel});
 
-  void handleTapSubmitButton() {}
+  Future<void> handleTapSubmitButton(BuildContext context) async {
+    await orderViewModel.submitOrder();
+
+    Navigator.pop(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,13 +39,13 @@ class OrderDetailsScreen extends StatelessWidget {
                 spacing: 8,
                 children: [
                   ...orderViewModel.orderProductList.map(
-                    (product) => OrderListCard(product: product),
+                    (product) => OrderCardWidget(product: product),
                   ),
                   ListenableBuilder(
                     listenable: orderViewModel,
                     builder: (context, child) => TextFormField(
                       onChanged: orderViewModel.updateName,
-                      initialValue: orderViewModel.name,
+                      initialValue: orderViewModel.name.trim(),
                       decoration: InputDecoration(
                         hintText: "Fill your name to place order",
                         helperText: "Name is required to place order.",
@@ -96,7 +100,7 @@ class OrderDetailsScreen extends StatelessWidget {
                         return ElevatedButton(
                           onPressed: orderViewModel.name.isEmpty
                               ? null
-                              : handleTapSubmitButton,
+                              : () => handleTapSubmitButton(context),
                           child: Text("Place Order"),
                         );
                       },
