@@ -35,10 +35,11 @@ class PastOrderScreen extends StatelessWidget {
             builder: (context, child) {
               final orderList = pastOrderViewModel.orderList;
               final isLoading = pastOrderViewModel.isLoading;
-              if (isLoading)
+              if (isLoading) {
                 return ListView(
                   children: [PastOrderShimmerWidget(listSize: 2)],
                 );
+              }
 
               return orderList.isEmpty
                   ? Center(child: Text("The list is empty..."))

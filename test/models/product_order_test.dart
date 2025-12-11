@@ -21,13 +21,11 @@ void main() {
 
     group("addProduct", () {
       late Product burger;
-      late Product egg;
       late Product fries;
       late Product softDrink;
 
       setUp(() async {
         burger = await productRepository.getProductById(1);
-        egg = await productRepository.getProductById(2);
         fries = await productRepository.getProductById(4);
         softDrink = await productRepository.getProductById(5);
       });

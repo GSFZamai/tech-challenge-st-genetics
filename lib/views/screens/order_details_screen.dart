@@ -9,7 +9,9 @@ class OrderDetailsScreen extends StatelessWidget {
   Future<void> handleTapSubmitButton(BuildContext context) async {
     await orderViewModel.submitOrder();
 
-    Navigator.pop(context);
+    if (context.mounted) {
+      Navigator.pop(context);
+    }
   }
 
   @override
