@@ -42,18 +42,18 @@ There is also a `release` version published on `firebase` built with GitHub Acti
 ### Order Details Screen
 
 - Details from the current order that includes the list of products with the following information:
-    - Product Name;
-    - Product Price;
-    - SubTotal (Sum of product's prices);
-    - Discount in Percentage;
-    - Discount in currency;
-    - Total value (Total price - total discount)
+  - Product Name;
+  - Product Price;
+  - SubTotal (Sum of product's prices);
+  - Discount in Percentage;
+  - Discount in currency;
+  - Total value (Total price - total discount)
 - InputField to get the user's name;
 - Place order button to place the order (Only enabled when the name is filled)
 
 ### Past Orders Screen
 
-  - List of the past placed orders
+- List of the past placed orders
 
 ## Technologies
 
@@ -79,6 +79,7 @@ The tests verifies if the classes initializations occurs as expect, test the mod
 - [ProductModel](./test/models/product_model_test.dart)
 - [ProductOrder](./test/models/product_order_test.dart)
 - [Product](./test/models/product_test.dart)
+- [ProductCardWidget](./test/views/widgets/product_card_widget_test.dart)
 
 To run the tests follow the steps:
 

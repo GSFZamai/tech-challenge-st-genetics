@@ -17,8 +17,6 @@ class Order {
     name: json['name'] as String,
   );
 
-  get pathProvider => null;
-
   void addProduct(Product product) {
     if (product.category == ProductCategoryEnum.sandwich && _hasSandwich()) {
       throw CustomException("Only one sandwich can be added on order.");
@@ -36,21 +34,6 @@ class Order {
 
   void cleanList() {
     productList.clear();
-  }
-
-  Future<void> submitOrder(String name) async {
-    try {
-      await pathProvider.writeOrder(
-        Order(id: id, productList: productList, name: name),
-      );
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<List<Order>> getSubmittedOrderList() async {
-    final List<Order> orderList = await pathProvider.getOrderList();
-    return orderList;
   }
 
   double calculateDiscount() {
