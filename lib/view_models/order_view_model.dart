@@ -53,6 +53,8 @@ class OrderViewModel extends ChangeNotifier {
 
   Future<void> submitOrder() async {
     await _orderModel.submitOrder(name);
+    updateName("");
+    notifyListeners();
   }
 
   Future<List<Order>> getSubmittedOrderList() async {

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:good_hamburger/view_models/order_view_model.dart';
-import 'package:good_hamburger/views/screens/previous_order_screen.dart';
-import 'package:good_hamburger/views/widgets/order_list_card.dart';
+import 'package:good_hamburger/views/widgets/order_card_widget.dart';
 
 class OrderDetailsScreen extends StatelessWidget {
   final OrderViewModel orderViewModel;
@@ -10,13 +9,7 @@ class OrderDetailsScreen extends StatelessWidget {
   Future<void> handleTapSubmitButton(BuildContext context) async {
     await orderViewModel.submitOrder();
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) =>
-            PreviousOrderScreen(orderViewModel: orderViewModel),
-      ),
-    );
+    Navigator.pop(context);
   }
 
   @override
@@ -46,7 +39,7 @@ class OrderDetailsScreen extends StatelessWidget {
                 spacing: 8,
                 children: [
                   ...orderViewModel.orderProductList.map(
-                    (product) => OrderListCard(product: product),
+                    (product) => OrderCardWidget(product: product),
                   ),
                   ListenableBuilder(
                     listenable: orderViewModel,

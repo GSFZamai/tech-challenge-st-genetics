@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:good_hamburger/models/entities/product.dart';
+import 'package:good_hamburger/models/enums/product_category_enum.dart';
 
-class ProductWidget extends StatelessWidget {
+class ProductCardWidget extends StatelessWidget {
   final Product product;
   final VoidCallback onPressed;
   final VoidCallback onLongPress;
   final bool isSelected;
 
-  const ProductWidget({
+  const ProductCardWidget({
     super.key,
     required this.product,
     required this.onPressed,
@@ -28,7 +29,9 @@ class ProductWidget extends StatelessWidget {
             Row(
               spacing: 8,
               children: [
-                Icon(Icons.lunch_dining),
+                product.category == ProductCategoryEnum.extras
+                    ? Icon(Icons.fastfood)
+                    : Icon(Icons.lunch_dining),
                 Text(
                   product.name,
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),

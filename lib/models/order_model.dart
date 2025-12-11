@@ -5,12 +5,23 @@ import 'package:good_hamburger/models/entities/product.dart';
 import 'package:good_hamburger/models/shared/custom_exception.dart';
 
 class OrderModel {
+  PathProvider pathProvider = PathProvider();
   late int id = 1;
   late String name;
   late List<Product> productList = [];
-  PathProvider pathProvider = PathProvider();
 
-  OrderModel();
+  OrderModel() {
+    _init();
+  }
+
+  Future<void> _init() async {
+    try {
+      final List<Order> list = await getSubmittedOrderList();
+      id = list.isEmpty ? 1 : list.last.id + 1;
+    } catch (e) {
+      id = 1;
+    }
+  }
 
   void addProduct(Product product) {
     if (product.category == ProductCategoryEnum.sandwich && _hasSandwich()) {

@@ -4,8 +4,10 @@ import 'package:good_hamburger/models/enums/product_category_enum.dart';
 import 'package:good_hamburger/models/shared/custom_exception.dart';
 import 'package:good_hamburger/view_models/order_view_model.dart';
 import 'package:good_hamburger/view_models/product_view_model.dart';
-import 'package:good_hamburger/views/widgets/order_widget.dart';
-import 'package:good_hamburger/views/widgets/product_widget.dart';
+import 'package:good_hamburger/views/screens/past_order_screen.dart';
+import 'package:good_hamburger/views/widgets/order_floating_button_widget.dart';
+import 'package:good_hamburger/views/widgets/product_card_widget.dart';
+import 'package:good_hamburger/views/widgets/product_shimmer_widget.dart';
 
 class ProductListScreen extends StatefulWidget {
   const ProductListScreen({super.key});
@@ -18,6 +20,7 @@ class _ProductListScreen extends State<ProductListScreen> {
   ProductViewModel productViewModel = ProductViewModel();
   OrderViewModel orderViewModel = OrderViewModel();
   ProductCategoryEnum? productCategory;
+
   void handlePressProductCard(Product product) {
     try {
       orderViewModel.addProduct(product);
@@ -30,10 +33,19 @@ class _ProductListScreen extends State<ProductListScreen> {
     }
   }
 
+  void handleTapAppBarButton() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PastOrderScreen(orderViewModel: orderViewModel),
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
-    productViewModel.init();
+    // productViewModel.init();
   }
 
   @override
@@ -48,12 +60,22 @@ class _ProductListScreen extends State<ProductListScreen> {
         backgroundColor: Colors.amber,
         title: Align(
           alignment: AlignmentGeometry.center,
-          child: Column(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Icon(Icons.lunch_dining),
-              Text(
-                'Good Burger',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              Container(),
+              Column(
+                children: [
+                  Icon(Icons.lunch_dining),
+                  Text(
+                    'Good Burger',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              IconButton(
+                onPressed: handleTapAppBarButton,
+                icon: Icon(Icons.list_alt_sharp),
               ),
             ],
           ),
@@ -94,9 +116,17 @@ class _ProductListScreen extends State<ProductListScreen> {
               ListenableBuilder(
                 listenable: productViewModel,
                 builder: (context, child) {
+                  final isLoading = productViewModel.isLoading;
                   final productList = productViewModel.productList;
+
+                  if (isLoading) {
+                    return ProductShimmerWidget(listSize: 5);
+                  }
+
                   if (productList.isEmpty) {
-                    return Text("Fetching data...");
+                    return Expanded(
+                      child: Center(child: Text("Empty list...")),
+                    );
                   }
                   return ListenableBuilder(
                     listenable: orderViewModel,
@@ -104,7 +134,7 @@ class _ProductListScreen extends State<ProductListScreen> {
                       return Column(
                         children: productList
                             .map(
-                              (product) => ProductWidget(
+                              (product) => ProductCardWidget(
                                 onPressed: () =>
                                     handlePressProductCard(product),
                                 onLongPress: () =>
@@ -134,7 +164,9 @@ class _ProductListScreen extends State<ProductListScreen> {
                     builder: (context, child) {
                       final orderProductList = orderViewModel.orderProductList;
                       if (orderProductList.isEmpty) return Container();
-                      return OrderWidget(orderViewModel: orderViewModel);
+                      return OrderFloatingButtonWidget(
+                        orderViewModel: orderViewModel,
+                      );
                     },
                   ),
                 ),

@@ -14,7 +14,7 @@ void main() {
   });
 
   group("ProductOrder", () {
-    test("if order instantiates correctly", () {
+    testWidgets("if order instantiates correctly", (tester) async {
       expect(order, isInstanceOf<OrderModel>());
       expect(order.id, 1);
     });
