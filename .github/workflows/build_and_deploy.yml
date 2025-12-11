@@ -30,7 +30,7 @@ jobs:
           cache: gradle
 
       - name: Build app
-        run: cd android && ./gradlew assembleRelease
+        run: cd android && ls && ./gradlew assembleRelease
 
       - name: Upload artifact
         uses: actions/upload-artifact@v5.0.0
