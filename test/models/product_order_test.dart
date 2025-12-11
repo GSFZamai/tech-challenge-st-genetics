@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:good_hamburger/models/product_model.dart';
 import 'package:good_hamburger/models/entities/product.dart';
-import 'package:good_hamburger/models/product_order_model.dart';
+import 'package:good_hamburger/models/order_model.dart';
 import 'package:good_hamburger/models/shared/custom_exception.dart';
 
 void main() {
