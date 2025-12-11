@@ -4,7 +4,7 @@ Project in flutter that implementes the requirements to Good Burger App
 
 ## Table of Content
 
-- [Table of Content](#1-table-of-content)
+- [Table of Content](#table-of-content)
 - [Start project](#start-project)
   - [Debug](#debug)
   - [Release](#release)
@@ -27,7 +27,7 @@ To run the project in debug mode, on the root folder follow the steps below:
 
 ### Release
 
-There is also a `release` version published on `firebase` built with GitHub Actions as described on [CICD section](#cicd);
+There is also a `release` version published on `firebase` built with GitHub Actions as described on [CI/CD section](#cicd);
 
 ## Screens
 
